@@ -1,19 +1,27 @@
 import argparse
+from typing import Optional, Match
+
 import validators
 import re
 
 
 # Function checks if is url is wiki url
-def is_wiki_url(url):
+def is_wiki_url(url: str) -> Optional[Match[str]]:
     return re.search('(https://).*(wiki).*(/wiki/)', url)
 
 
 # Returns the lang prefix from url
-def get_lang_prefix(url):
+def get_lang_prefix(url: str) -> str:
     return re.search(r'(https://)(.*?)(.wiki)', url).group(2)
 
 
-if __name__ == '__main__':
+# Find path from url A to url B
+def find_wiki_path(start: str, finish: str, rate_limit: int, depth: int):
+    pass
+
+
+# Main function
+def main() -> None:
     arg_parser = argparse.ArgumentParser(
         description='Road2Wiki for searching path from A to B with rate limit and depth')
     arg_parser.add_argument('--start', type=str, required=True, help='Start page')
@@ -27,4 +35,17 @@ if __name__ == '__main__':
         print("Valid/s not valid")
         exit(1)
 
-    print(get_lang_prefix(args.start), get_lang_prefix(args.finish))
+    start_prefix = get_lang_prefix(args.start)
+    finish_prefix = get_lang_prefix(args.finish)
+
+    if start_prefix != finish_prefix:
+        print("Prefix is not equal")
+        exit(2)
+
+    print(find_wiki_path(args.start, args.finish, args.rate_limit, args.depth))
+
+    exit(0)
+
+
+if __name__ == '__main__':
+    main()
